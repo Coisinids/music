@@ -4,13 +4,19 @@ import HomeView from '../views/home-view'
 const routes = [
   {
     path: '/',
-    name: 'home',
+    name: 'root',
     redirect:"/m",
     component: HomeView
   },
   {
     path: '/m',
+    name: 'home',
     component: HomeView
+  },
+  {
+    path: '/m/playList/:id',
+    name: 'playList',
+    component: () => import ("@/views/PlayList.vue") // 歌单详情页
   }
 ]
 
