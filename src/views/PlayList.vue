@@ -12,17 +12,43 @@
                 </div>
                 <!-- 文本描述 -->
                 <div class="p-h-text-info">
-
+                    <h2 class="name">{{playListData.name}}</h2>
+                    <p class="creator">
+                        <img :src="creatorInfo.avatarUrl" :alt="creatorInfo.nickname" class="avatar">
+                        {{creatorInfo.nickname}}
+                    </p>
                 </div>
            </div>
+        </section>
+
+        <!-- 歌曲列表 -->
+        <section class="m-p-songs">
+            <p class="songs-subtit">
+                <svg-icon class="icon" iconFileName="player"/>
+                <span>顺序播放全部 ({{songsData.length}})</span>
+            </p>
+            <ul class="songs-list" v-loading="loading">
+                <li class="songs-item" v-for="(item,index) in songsData" :key="item">
+                    <p class="order">{{index+1}}</p>
+                    <div class="content">
+                        <h4 class="name">{{item.name}}</h4>
+                        <p class="desc">
+                            <span v-for="aItem in item.ar" :key="aItem.id">
+                                {{aItem.name}} &nbsp;
+                            </span>
+                        </p>
+                    </div>
+                </li>
+            </ul>
         </section>
     </div>
 </template>
 
 <script setup>
 import { useRoute } from "vue-router"
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, computed } from "vue";
 import { getPlaylistDetail } from "@/api/recommend"
+import { getSongDetail } from "@/api/song"
 
 let route = useRoute()
 let playListData = ref({})
@@ -41,9 +67,29 @@ let getPlaylist = () => {
         console.log("歌单详情数据", res);
         playListData.value = res.data.playlist
         creatorInfo.value = res.data.playlist.creator
+
+        // 存有歌曲id的数组
+        let trackIds = res.data.playlist.trackIds
+        trackIds.length = Math.min(30, trackIds.length)
+        getSongs(trackIds)
     })
     .catch(err => {
         console.log("请求歌单详情出错", err);
+    })
+}
+
+// 根据id批量请求歌曲的信息
+let getSongs = (trackIds) => {
+    let ids = [];
+    trackIds.forEach(item => ids.push(item.id))
+    
+    // 携带参数，发起请求
+    getSongDetail(ids.join())
+    .then(res => {
+        songsData.push(...res.data.songs)
+    })
+    .catch(err => {
+        console.log("批量获取歌曲对象出错", err);
     })
 }
 
@@ -90,15 +136,83 @@ let handlePlayCount = (count) => {
                 }
                 .play-count{
                     position: absolute;
-                    right: 4px;
-                    top: 4px;
+                    right: 0;
+                    top: 0;
+                    padding: 2px;
                     color: @light-color-m;
+                    background-color: rgba(0,0,0,.2);
                     font-size: @font-size-mini;
                     .icon{
-                        width: 18px;
-                        height: 18px;
+                        width: 12px;
+                        height: 12px;
                     }
                 }
+            }
+            .p-h-text-info{
+                width: 65%;
+                .name{
+                    display: -webkit-box;
+                    overflow: hidden;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    height: 3em;
+                    line-height: 1.5em;
+                    color: @light-color-m;
+                    font-size: @font-size-medium;
+                    margin-bottom: 16px;
+                }
+                .creator{
+                    overflow:hidden;
+                    white-space:nowrap;
+                    text-overflow:ellipsis;
+                    color: @dark-color;
+                    img{
+                        width: 30px;
+                        height: 30px;
+                        border-radius: 50%;
+                        vertical-align: middle;
+                    }
+                }
+            }
+        }
+    }
+    .m-p-songs{
+        margin: 10px;
+        .songs-subtit{
+            margin-bottom: 10px;
+            line-height: 30px;
+            font-size: @font-size-medium;
+            color: @light-color;
+            .icon{
+                width: 26px;
+                height: 26px;
+                vertical-align: middle;
+            }
+            span{
+                vertical-align: middle;
+                margin-left: 4px;
+            }
+        }
+        .songs-item{
+            display: flex;
+            align-items: center;
+            box-sizing: border-box;
+            height: 64px;
+            .order{
+                width: 30px;
+                height: 30px;
+                font-size: @font-size-large;
+                color: @dark-color-m;
+            }
+            
+            h4.name{
+                font-size: @font-size-medium;
+                color: @light-color-m;
+                margin-bottom: 6px;
+            }
+            p.desc{
+                font-size: @font-size-small;
+                color: @dark-color;
             }
         }
     }

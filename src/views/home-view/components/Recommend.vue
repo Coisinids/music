@@ -98,6 +98,8 @@ const handleClickPlayList = (id)=>{
 </script>
 <style lang='less' scoped>
 .recommend {
+  padding-top: 88px;
+  width: 100%;
   .remd-header {
     margin: 10px;
     h3 {

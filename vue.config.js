@@ -30,7 +30,7 @@ module.exports = defineConfig({
   },
   chainWebpack(config){
     // 配置svg的loader
-    config.module.rules.delete("svg"); //重点:删除默认配置中处理svg
+    config.module.rules.delete("svg"); //删除默认配置中处理 SVG 图像的规则
     config.module
       .rule('svg')
       .exclude.add(path.join(__dirname, './src/icons'))

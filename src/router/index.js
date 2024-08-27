@@ -5,13 +5,36 @@ const routes = [
   {
     path: '/',
     name: 'root',
-    redirect:"/m",
+    redirect: "/m/recommend",
     component: HomeView
   },
   {
     path: '/m',
     name: 'home',
-    component: HomeView
+    component: HomeView,
+    redirect: "/m/recommend",
+    children:[
+      {
+        path: "recommend",
+        name: "recommend",
+        component: () => import("@/views/home-view/components/Recommend")
+      },
+      {
+        path: "singer",
+        name: "singer",
+        component: () => import("@/views/home-view/components/Singer")
+      },
+      {
+        path: "ranking",
+        name: "ranking",
+        component: () => import("@/views/home-view/components/Ranking")
+      },
+      {
+        path: "search",
+        name: "search",
+        component: () => import("@/views/home-view/components/Search")
+      }
+    ]
   },
   {
     path: '/m/playList/:id',
