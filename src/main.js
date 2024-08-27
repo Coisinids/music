@@ -13,3 +13,5 @@ const app = createApp(App)
 app.component("SvgIcon",SvgIcon)
 
 app.use(store).use(router).use(directives).mount('#app')
+
+

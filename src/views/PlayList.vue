@@ -54,7 +54,7 @@ let route = useRoute()
 let playListData = ref({})
 let creatorInfo = ref({})
 let songsData = reactive([])
-
+let loading = computed(() => songsData.length <= 0)
 
 onMounted(()=>{
     getPlaylist()

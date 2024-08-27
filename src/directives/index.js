@@ -1,7 +1,7 @@
-
-
+import loading from "./loading"
 export default {
     install(app){
-        console.log("app",app);
+        // 注册全局自定义指令
+        app.directive("loading",loading)
     }
 }
