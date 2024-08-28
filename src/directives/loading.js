@@ -10,20 +10,23 @@ export default{
     mounted(el, binding){
         let loadApp = createApp(Loading)
         let instance = loadApp.mount(document.createElement("div"))
-        
-        if(binding.value) append(el, instance.$el)
+        el.instance = instance
+        if(binding.value)  append(el)
     },
     // 指令绑定的值发生变化时触发
     updated(el, binding){
-        // console.log("binding",binding);  
+        binding.value ? append(el) : remove(el)
     }
 }
-function append(el, child){
+function append(el,){
     // 获取被绑定元素的全部样式
     let allStyle = getComputedStyle(el)
     let arr = ["absolute", "fixed", "relative"]
 
     if(arr.indexOf(allStyle.position) === -1) el.style.position = "relative"
 
-    el.appendChild(child)
+    el.appendChild(el.instance.$el)
+}
+function remove(el){
+    el.removeChild(el.instance.$el)
 }

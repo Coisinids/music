@@ -11,7 +11,7 @@
     position: absolute;
     top: 50%;
     width: 100%;
-    transform: translate3d(-50%);
+    transform: translateY(-50%);
     .loading-content {
         text-align: center;
         .desc {

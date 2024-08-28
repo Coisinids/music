@@ -73,6 +73,10 @@
       }
     }
   }
+  .m-tab-panel {
+    width: 100%;
+    padding-top: 88px;
+  }
 }
 </style>
 

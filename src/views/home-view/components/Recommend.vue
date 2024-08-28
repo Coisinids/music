@@ -15,7 +15,7 @@
             </div>
             <ul class="remd-playlist">
                 <li v-for="item in playlist" :key="item" @click="handleClickPlayList(item.id)">
-                    <img class="cover" :src="item.picUrl" alt="封面" />
+                    <img class="cover" v-img-lazy="item.picUrl" alt="封面" />
                     <p class="name">{{ item.name }}</p>
                 </li>
             </ul>
@@ -28,7 +28,7 @@
             </div>
             <ul class="remd-newsong">
                 <li v-for="item in newSongList" :key="item">
-                    <img class="pic" :src="item.picUrl" alt="新歌封面" />
+                    <img class="pic" v-img-lazy="item.picUrl" alt="新歌封面" />
                     <div class="info">
                         <h4 class="name">{{ item.name }}</h4>
                         <p>
@@ -96,9 +96,9 @@ const handleClickPlayList = (id)=>{
     router.push(`/m/playList/${id}`)
 }
 </script>
-<style lang='less' scoped>
+<style lang="less" scoped>
 .recommend {
-  padding-top: 88px;
+  // padding-top: 88px;
   width: 100%;
   .remd-header {
     margin: 10px;

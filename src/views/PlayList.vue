@@ -64,7 +64,7 @@ onMounted(()=>{
 let getPlaylist = () => {
     getPlaylistDetail(route.params.id)
     .then(res => {
-        console.log("歌单详情数据", res);
+        // console.log("歌单详情数据", res);
         playListData.value = res.data.playlist
         creatorInfo.value = res.data.playlist.creator
 
