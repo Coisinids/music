@@ -10,3 +10,14 @@ export function getSongDetail(ids){
         }
     })
 }
+
+// 请求mp3
+export function getSongUrl(id){
+    return request({
+        url: '/song/url',
+        method: 'get',
+        params:{
+            id 
+        }
+    })
+}

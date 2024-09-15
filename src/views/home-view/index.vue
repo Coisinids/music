@@ -57,7 +57,7 @@
     top: 44px;
     left: 0;
     width: 100%;
-    z-index: 999;
+    z-index: 99;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -79,6 +79,3 @@
   }
 }
 </style>
-
-  
-  

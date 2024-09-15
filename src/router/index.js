@@ -40,7 +40,12 @@ const routes = [
     path: '/m/playList/:id',
     name: 'playList',
     component: () => import ("@/views/PlayList.vue") // 歌单详情页
-  }
+  },
+  {
+    path: '/m/singerDetail/:id',
+    name: 'singerDetail',
+    component: () => import ("@/views/SingerDetail.vue") // 歌手详情页
+  },
 ]
 
 const router = createRouter({

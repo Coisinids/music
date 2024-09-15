@@ -27,7 +27,7 @@
                 <h3>新歌推荐</h3>
             </div>
             <ul class="remd-newsong">
-                <li v-for="item in newSongList" :key="item">
+                <li v-for="item in newSongList" :key="item" @click="playSong(item)">
                     <img class="pic" v-img-lazy="item.picUrl" alt="新歌封面" />
                     <div class="info">
                         <h4 class="name">{{ item.name }}</h4>
@@ -47,11 +47,13 @@
 import {onMounted, reactive} from "vue"
 import { getRecommendSwiper, getRecommendPlaylist, getRecommendNewSong } from "@/api/recommend"
 import { useRouter } from "vue-router"
+import {useStore} from "vuex"
 
 const swiperImgList = reactive([])
 let playlist = reactive([])
 let newSongList = reactive([])
 let router = useRouter()
+const store = useStore()
 
 
 onMounted(()=>{
@@ -94,6 +96,11 @@ let getNewSongList = () => {
 
 const handleClickPlayList = (id)=>{
     router.push(`/m/playList/${id}`)
+}
+
+//点击播放歌曲
+const playSong = ({id, name, picUrl, song})=>{
+  store.dispatch("addOneSong",{id, name, picUrl, ar: song.artists})
 }
 </script>
 <style lang="less" scoped>

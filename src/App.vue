@@ -1,15 +1,13 @@
 <template>
   <div id="root">
     <router-view/>
-
-    <!-- 底部音乐播放条 -->
-    <!-- <BottomPlayerVue/> -->
+    <MusicPlayer/>
   </div>
   
 </template>
 
 <script setup>
-import BottomPlayerVue from "@/components/BottomPlayer.vue";
+import MusicPlayer from "@/views/music-player"
 </script>
 <style lang="less">
 </style>
