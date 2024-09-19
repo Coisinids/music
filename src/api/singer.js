@@ -36,16 +36,6 @@ export function getSingerDetail(id){
     })
 }
 
-// 获取歌手的全部歌曲
-// export function getSingerAllSongs(id){
-//     return request({
-//         url: '/artist/songs',
-//         method: 'get',
-//         params:{
-//             id
-//         }
-//     })
-// }
 
 // 获取歌手50首热门歌曲
 export function getSingerAllSongs(id){

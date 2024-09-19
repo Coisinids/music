@@ -21,3 +21,14 @@ export function getSongUrl(id){
         }
     })
 }
+
+// 请求歌词
+export function getLyric(id){
+    return request({
+        url: '/lyric',
+        method: 'get',
+        params:{
+            id 
+        }
+    })
+}

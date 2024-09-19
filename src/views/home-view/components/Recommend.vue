@@ -94,11 +94,12 @@ let getNewSongList = () => {
     });
 };
 
+//跳转到对应推荐歌单里
 const handleClickPlayList = (id)=>{
     router.push(`/m/playList/${id}`)
 }
 
-//点击播放歌曲
+//添加1首歌到播放列表
 const playSong = ({id, name, picUrl, song})=>{
   store.dispatch("addOneSong",{id, name, picUrl, ar: song.artists})
 }

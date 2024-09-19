@@ -1,7 +1,5 @@
 import { useStore } from "vuex";
-import {computed,watch,nextTick} from "vue"
-// import { Toast } from 'vant';
-
+import {computed,watch} from "vue"
 
 
 export default function(audioRef){
@@ -43,9 +41,6 @@ export default function(audioRef){
     const changeMode = async ()=>{
         const modelVal = (playMode.value + 1) % 3
         store.dispatch("changePlayMode",modelVal)
-        await nextTick()
-        //页面DOM更新完成
-        // Toast({message: modeText, position: 'bottom',})
     }
     
     return {

@@ -21,7 +21,13 @@ import { ref, computed, onMounted, watch } from "vue"
 
 //进度条容器
 const playRef = ref(null)
+//进度条容器的宽度
 const playWidth = ref(0)
+
+// 获取进度条容器的总宽度
+onMounted(()=>{
+    playWidth.value = playRef.value.offsetWidth - sliderBtnRef.value.offsetWidth
+})
 
 //已播放进度条
 const playedRef = ref(null)
@@ -35,8 +41,10 @@ const sliderStyle = computed(()=>`transform:translateX(${playedWidth.value}px)`)
 
 //时间进度比
 let props = defineProps(["progressRatio"])
+
 //接受父组件传来的事件
 let emits = defineEmits(["progressMove","progressEnd"])
+
 // 存储触摸相关事件的位置信息
 const touch = {}
 
@@ -45,10 +53,12 @@ watch(()=>props.progressRatio,(newRatio)=>{
     playedWidth.value = newRatio * playWidth.value 
 })
 
-// 获取进度条容器的总宽度
-onMounted(()=>{
-    playWidth.value = playRef.value.offsetWidth - sliderBtnRef.value.offsetWidth
-})
+//点击进度条时触发
+const handleClick = (e)=>{
+    playedWidth.value = Math.max(0,Math.min(e.offsetX,playWidth.value))
+    let ratio = playedWidth.value / playWidth.value
+    emits("progressEnd",ratio)
+}
 
 //触摸滑块
 const touchStartProgress = (e)=>{
@@ -71,12 +81,7 @@ const touchEndProgress = (e)=>{
     emits("progressEnd",ratio)
 }
 
-//点击进度条时触发
-const handleClick = (e)=>{
-    playedWidth.value = Math.max(0,Math.min(e.offsetX,playWidth.value))
-    let ratio = playedWidth.value / playWidth.value
-    emits("progressEnd",ratio)
-}
+
 </script>
 
 <style lang="less" scoped>

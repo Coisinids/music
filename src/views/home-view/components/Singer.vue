@@ -1,6 +1,6 @@
 <template>
   <div class="singer">
-    <!-- 歌手的列表区域 -->
+    <!-- 歌手的列表区域  probeType 为 3，任何时候都派发 scroll 事件，包括调用 scrollTo 或者触发 momentum 滚动动画  -->
     <Scroll class="scroll-plane" :probeType="3" ref="scrollRef" @scrollView="handleScrollView" >
       <ul class="singer-list" ref="groupRef" >
         <!-- 列表组 -->
@@ -103,7 +103,7 @@ let allGroupItemHeight = ref([])
 
 //点击对应字母触发
 function handleTouchStart(e,i){
-  touchPosition.y1 = e.touches[0].pageY //第一个出触摸点的y坐标
+  touchPosition.y1 = e.touches[0].pageY //第一个触摸点的y坐标
   touchPosition.anchorIndex = i
   scrollTo(i)
 }

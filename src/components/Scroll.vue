@@ -23,7 +23,7 @@ let props = defineProps({
     },
     click:{
         type:Boolean,
-        default:true
+        default:true  //不阻止浏览器的原生 click 事件
     }
 })
 let emit = defineEmits(["scrollView"])

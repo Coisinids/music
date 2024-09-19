@@ -118,7 +118,7 @@ export default createStore({
       commit("setCurrentIndex",currentIndex)
       commit("setRandomList",randomList)
     },
-    //改变播放状态
+    //改变播放模式
     changePlayMode({state,getters,commit},modelVal){
 
       let randomList = state.randomList.slice()

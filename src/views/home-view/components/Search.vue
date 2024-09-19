@@ -39,7 +39,7 @@
 <script setup>
 import {getSearchResult,getHotKeyword,getDefaultKeyword,} from "@/api/search";
 import Scroll from "@/components/Scroll.vue";
-import { watch, ref, onMounted, reactive } from "vue";
+import { watch, ref, onMounted } from "vue";
 import { getSongDetail } from "@/api/song"
 import {useStore} from "vuex"
 

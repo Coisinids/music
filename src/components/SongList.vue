@@ -6,7 +6,12 @@
       <span>顺序播放全部 ({{ songsData.length }})</span>
     </p>
     <ul class="songs-list" v-loading="loading">
-      <li class="songs-item" v-for="(item, index) in songsData" :key="index" @click="playSong(item)">
+      <li
+        class="songs-item"
+        v-for="(item, index) in songsData"
+        :key="index"
+        @click="playSong(item)"
+      >
         <p class="order">{{ index + 1 }}</p>
         <div class="content">
           <h4 class="name">{{ item.name }}</h4>
@@ -22,15 +27,15 @@
 </template>
 
 <script setup>
-import {useStore} from "vuex"
-const store = useStore()
-const {songsData} = defineProps(["songsData"])
-import { computed } from "vue"
-let loading = computed(()=>songsData.length <= 0)
+import { computed } from "vue";
+import { useStore } from "vuex";
+const store = useStore();
+const { songsData } = defineProps(["songsData"]);
+let loading = computed(() => songsData.length <= 0);
 //点击播放歌曲
-const playSong = ({id, name, al, ar})=>{
-  store.dispatch("addOneSong",{id, name, picUrl:al.picUrl, ar})
-}
+const playSong = ({ id, name, al, ar }) => {
+  store.dispatch("addOneSong", { id, name, picUrl: al.picUrl, ar });
+};
 </script>
 
 <style lang="less" scoped>

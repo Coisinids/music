@@ -1,5 +1,6 @@
 <template>
   <div class="singer-detail">
+    <SvgIcon class="iconNav" iconFileName="back" @click="$router.go(-1)"/>
     <div class="artist-info">
       <img class="a-cover" :src="artistInfo.cover" :alt="artistInfo.name" />
       <div class="a-content">
@@ -51,6 +52,15 @@ onMounted(() => {
 
 <style lang="less">
 .singer-detail {
+  .iconNav{
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    z-index: 99;
+    width: 22px !important;
+    height: 22px !important;
+    color: #f0d0e0;
+  }
   .artist-info {
     position: relative;
     height: 50vh;

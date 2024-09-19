@@ -1,3 +1,4 @@
+// 批量处理svg 图标文件
 const request = require.context("./svg",false,/\.svg$/)
 //request.keys() : 得到./svg目录下所有符合条件的文件的相对路径
 request.keys().forEach(src => {

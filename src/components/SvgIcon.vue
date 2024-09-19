@@ -16,7 +16,6 @@ const props = defineProps({
 </script>
 
 <style lang="less" scoped>
-
 .svg-icon{
     fill: currentColor; 
 }

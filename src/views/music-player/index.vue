@@ -20,18 +20,33 @@
             </h3>
           </div>
         </div>
-        <div class="song-wrap">
-          <!-- 水平滚动区域 -->
-          <div class="song-wrap-l">
+        <div class="song-wrap" @click="toggleBlock">
+          <!-- 左边的唱片区域 -->
+          <div class="song-wrap-l" :class="{ showBlock: showCdBlock }">
             <div class="record-disc">
               <div class="rotate" :class="isRotate">
                 <img :src="currentSong.picUrl" :alt="currentSong.name" />
               </div>
             </div>
             <!-- 单行歌词 -->
-            <p class="song-lyric">歌词歌词歌词歌词</p>
+            <p class="song-lyric">{{currentLyric}}</p>
           </div>
-          <div class="song-wrap-r"></div>
+          <!-- 右边的滚动歌词区域 -->
+          <Scroll
+            class="song-wrap-r"
+            :class="{ showBlock: !showCdBlock }"
+            ref="lyricScrollRef"
+          >
+            <div class="lyric-block" ref="lyricBlockRef">
+              <p
+                v-for="(item, index) in lyricList"
+                :key="item"
+                :class="{ active: index === currentLine }"
+              >
+                {{ item.lyric }}
+              </p>
+            </div>
+          </Scroll>
         </div>
         <div class="player-footer">
           <div class="player-progress">
@@ -44,7 +59,11 @@
             <span class="time endtime">{{ formatTime(duration) }}</span>
           </div>
           <div class="player-controller">
-            <SvgIcon class="icon" :iconFileName="modeIcon" @click="changeMode" />
+            <SvgIcon
+              class="icon"
+              :iconFileName="modeIcon"
+              @click="changeMode"
+            />
             <SvgIcon class="icon" iconFileName="prev" @click="prevSong" />
             <SvgIcon
               class="icon"
@@ -79,19 +98,21 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { getSongUrl } from "@/api/song";
-import { formatTime } from "@/utils/fromatTime";
+import { formatTime } from "@/utils/fromat";
 import Progress from "./components/Progress.vue";
 import PlayerBar from "./components/PlayerBar.vue";
 import controll from "./js/controll";
+import lyric from "./js/lyric";
 
-let audioRef = ref(null);
 const store = useStore();
+let audioRef = ref(null);
 let duration = ref(0);
-let { togglePlayState, prevSong, nextSong, changeMode, modeText, modeIcon } =
-  controll(audioRef);
+let { togglePlayState, prevSong, nextSong, changeMode, modeText, modeIcon } = controll(audioRef);
+
+
 
 //当前播放列表
 let musicPlayList = computed(() => store.state.musicPlayList);
@@ -109,6 +130,35 @@ let isRotate = computed(() => (playingState.value ? "play" : "pause"));
 let currentTime = ref(0);
 //播放模式
 let playMode = computed(() => store.state.playMode);
+//控制cd区块与歌词区块的显示
+let showCdBlock = ref(false);
+
+let {lyricScrollRef,lyricBlockRef,lyricList,currentLyric,currentLine,clear,init} = lyric(currentTime);
+
+// 当audio准备就绪
+function audioReady() {
+  // 获取mp3的总时长
+  duration.value = audioRef.value.duration;
+}
+
+//音频播放过程中不断触发
+const timeUpdate = () => {
+  currentTime.value = audioRef.value.currentTime;
+};
+
+//当音乐播放结束时
+const playEnd = () => {
+  audioRef.value.currentTime = 0;
+  if (playMode.value === 1) {
+    // 单曲循环
+    audioRef.value.play();
+    clear()
+    init()
+  } else {
+    // 播放下一首
+    nextSong();
+  }
+};
 
 // 时间进度比 = 当前的播放时间 / 总时长
 let progressRatio = computed(() => {
@@ -131,41 +181,41 @@ watch(currentSong, (newSong) => {
       console.log("MP3获取失败", err);
     });
 });
-// 取消播放器的全屏状态
-const cancelFullScreen = () => {
-  store.commit("setFullScreen", false);
-};
-// 当audio准备就绪
-function audioReady() {
-  // 获取mp3的总时长
-  duration.value = audioRef.value.duration;
-}
 
-//音频播放过程中不断触发
-const timeUpdate = () => {
-  currentTime.value = audioRef.value.currentTime;
-};
-
-//当音乐播放结束时
-const playEnd = () => {
-  audioRef.value.currentTime = 0;
-  if (playMode.value === 1) {
-    // 单曲循环
-    audioRef.value.play()
-  } else {
-    // 播放下一首
-    nextSong();
+//监听播放状态来决定歌词是否滚动
+watch(playingState,(newPlayingState)=>{
+  if(newPlayingState){
+    clear()
+    init()
+  }else{
+    clear()
   }
-};
+})
+
+
+
 //移动滑块时触发
 const progressMove = (ratio) => {
   if (playingState.value) store.commit("setPlayingState", false);
   currentTime.value = audioRef.value.currentTime = ratio * duration.value;
+  clear()
 };
 //结束触摸滑块时触发
 const progressEnd = (ratio) => {
   if (!playingState.value) store.commit("setPlayingState", true);
   currentTime.value = audioRef.value.currentTime = ratio * duration.value;
+  clear()
+  init()
+};
+
+// 取消播放器的全屏状态
+const cancelFullScreen = () => {
+  store.commit("setFullScreen", false);
+};
+
+//切换cd区块与歌词区块的显示
+const toggleBlock = () => {
+  showCdBlock.value = !showCdBlock.value;
 };
 </script>
 
@@ -269,9 +319,9 @@ const progressEnd = (ratio) => {
     height: calc(100vh - 190px);
     // cd唱片区块
     .song-wrap-l {
-      // position: absolute;
-      // top: 0;
-      // left: -200%;
+      position: absolute;
+      top: 0;
+      left: -200%;
       width: 100%;
       padding-top: 20px;
       //唱片圆盘
@@ -312,25 +362,25 @@ const progressEnd = (ratio) => {
       }
     }
     // 歌词区块
-    .song-wrap-r {
+    .song-wrap-r{
       position: absolute;
       left: -200%;
       top: 0;
       width: 100%;
       height: 100%;
-      .lyric-block {
+      .lyric-block{
         text-align: center;
         font-size: @font-size-small;
         color: @dark-color;
-        p {
+        p{
           line-height: 30px;
         }
       }
-      .active {
+      .active{
         color: #fff;
       }
     }
-    .showBlock {
+    .showBlock{
       left: 0;
     }
   }

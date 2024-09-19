@@ -1,5 +1,6 @@
 <template>
    <div class="m-playlist">
+        <SvgIcon class="iconNav" iconFileName="back" @click="$router.go(-1)"/>
         <section class="m-p-header">
            <img class="p-header-bg" :src="playListData.coverImgUrl" alt="背景图"> 
            <div class="p-header-container">
@@ -37,7 +38,6 @@ let route = useRoute()
 let playListData = ref({})
 let creatorInfo = ref({})
 let songsData = reactive([])
-let loading = computed(() => songsData.length <= 0)
 
 onMounted(()=>{
     getPlaylist()
@@ -47,7 +47,6 @@ onMounted(()=>{
 let getPlaylist = () => {
     getPlaylistDetail(route.params.id)
     .then(res => {
-        // console.log("歌单详情数据", res);
         playListData.value = res.data.playlist
         creatorInfo.value = res.data.playlist.creator
 
@@ -90,6 +89,15 @@ let handlePlayCount = (count) => {
 
 <style lang='less' scoped>
 .m-playlist{
+    .iconNav{
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        z-index: 99;
+        width: 22px !important;
+        height: 22px !important;
+        color: #f0d0e0;
+    }
     .m-p-header{
         position: relative;
         height: 186px;
