@@ -131,7 +131,7 @@ let currentTime = ref(0);
 //播放模式
 let playMode = computed(() => store.state.playMode);
 //控制cd区块与歌词区块的显示
-let showCdBlock = ref(false);
+let showCdBlock = ref(true);
 
 let {lyricScrollRef,lyricBlockRef,lyricList,currentLyric,currentLine,clear,init} = lyric(currentTime);
 
